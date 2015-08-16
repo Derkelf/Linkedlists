@@ -4,6 +4,7 @@
 #include "lists.h"
 
 void insert_sorted(node** list, const int* n);
+void free_list(node** list);
 
 int main()
 {
@@ -16,6 +17,8 @@ int main()
     for (node* i = nums; i != NULL; i = i->next)
         printf("%d ", i->n);
     printf("\n");
+
+    free_list(&nums);
 
     return 0;
 }
@@ -70,4 +73,35 @@ void insert_sorted(node** list, const int* n)
             }
         }
     }
+}
+
+void free_list(node** list)
+{
+    //free memory starting from the end
+    node* i = *list;
+    while(i != NULL)
+    {
+        if (i->next != NULL)
+        {
+            if (i->next->next == NULL)
+            {
+                free(i->next);
+                i->next = NULL;                
+            }
+            else
+                i = i->next;
+        }
+        else
+        {
+            if ((*list)->next != NULL)
+                i = *list;
+            else
+            {
+                free(i);
+                i = NULL;
+            }
+        }
+    }
+
+    *list = NULL;
 }
